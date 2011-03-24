@@ -1,3 +1,14 @@
+task :push => [:clean] do |t|
+	puts "\nPushing to ec2 node\n"
+	
+	begin
+		sh "./push.sh"
+	rescue Exception
+		fail "\nPushing to ec2 node Failed\n"
+	end
+
+end
+
 task :run => [:detect_bin] do |t|
 	puts "\nRunning Binary...\n"
 	
@@ -20,7 +31,8 @@ task :detect_bin => [:detect_toolset] do |t|
 		version = `g++ -dumpversion`
 		@target = "darwin-#{version.strip}"
 	else @toolset == "gcc"
-		@target = "gcc"
+		version = `g++ -dumpversion`
+		@target = "gcc-#{version.strip}"
 	end
 	
 	puts "\nTarget is \"#{@target}\"\n"
