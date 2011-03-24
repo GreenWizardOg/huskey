@@ -1,0 +1,83 @@
+task :run => [:detect_bin] do |t|
+	puts "\nRunning Binary...\n"
+	
+	fail("target not set") if @target.nil?
+	
+	begin
+		sh "./bin/#{@target}/release/elog < email.txt"
+	rescue Exception
+		fail "\nRunning Binary Failed\n"
+	end
+
+end
+
+task :detect_bin => [:detect_toolset] do |t|
+	puts "\nDetecting Binary...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+	
+	if @toolset == "darwin"
+		version = `g++ -dumpversion`
+		@target = "darwin-#{version.strip}"
+	else @toolset == "gcc"
+		@target = "gcc"
+	end
+	
+	puts "\nTarget is \"#{@target}\"\n"
+	
+	begin
+		result = sh "ls ./bin/#{@target}/release/elog"
+	rescue Exception
+		fail "\nBinary not detected, here's a suggestion run \"rake build\" first!\n"
+	end
+end
+
+task :build => [:clean] do |t|
+	puts "\nBuilding...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+	
+	result = sh "bjam release debug toolset=#{@toolset}"
+	
+	display_result(result, "Building")
+	
+end
+
+task :clean => [:detect_toolset] do |t|
+	puts "\nCleaning...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+
+	result = sh "bjam --clean release debug toolset=#{@toolset}"
+	
+	display_result(result, "Cleaning")
+
+end
+
+task :detect_toolset do |t|
+	puts "\nDetecting toolset...\n"
+
+	result = `uname`
+	
+	result = result.strip
+	
+	if result == "Darwin"
+		@toolset = "darwin"
+	elsif result == "Linux"
+		@toolset = "gcc"
+	else
+		fail("Not able to detect environment to set toolset")
+	end
+	
+	puts "Toolset: #{@toolset} detected"
+	
+end
+
+def display_result(result, action)
+	if result
+		puts "\n#{action} succeeded\n"
+	else
+		puts "\n#{action} failed\n"
+		fail
+	end
+end
