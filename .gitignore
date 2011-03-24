@@ -1,0 +1,10 @@
+bin
+
+bin/**/*
+
+*.o
+
+.project
+
+.cproject
+
