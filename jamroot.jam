@@ -1,8 +1,1 @@
-local BOOST_HEADER_PATH = [ modules.peek : BOOST_HEADER_PATH ] ;
-echo "BOOST_HEADER_PATH = $(BOOST_HEADER_PATH)" ;  
-
-lib libboost_regex : : <name>boost_regex ;
-
-project : requirements <include>$(BOOST_HEADER_PATH) <library>libboost_regex ;
-
-exe elog : elog.cpp ;
+exe elog : elog.cpp ConfigManager.cpp ConfigManager.h ;

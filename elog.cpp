@@ -1,25 +1,26 @@
 //============================================================================
 // Name        : elog.cpp
-// Author      : 
+// Author      : Barry O'Driscoll
 // Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C, Ansi-style
+// Copyright   :
+// Description : elog main file
 //============================================================================
 
-#include <boost/regex.hpp>
 #include <iostream>
 #include <string>
 
+#include "ConfigManager.h"
+
+
+using namespace std;
+
+
 int main()
 {
-    std::string line;
-    boost::regex pat( "^Subject: (Re: |Aw: )*(.*)" );
+	cout << "HelloWorld" << endl;
 
-    while (std::cin)
-    {
-        std::getline(std::cin, line);
-        boost::smatch matches;
-        if (boost::regex_match(line, matches, pat))
-            std::cout << matches[2] << std::endl;
-    }
+	ConfigManager* configManager = new ConfigManager;
+
+	cout << "Adding 2 + 2" << endl;
+	cout << "Result: " << configManager->add(2,2) << endl;
 }
