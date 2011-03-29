@@ -1,6 +1,8 @@
 local GTEST_DIR = [ modules.peek : GTEST_DIR ] ;
 echo "GTEST_DIR = $(GTEST_DIR)" ;
 
-exe test_all : test_ConfigManager.cpp ../ConfigManager.cpp ../ConfigManager.h : <include>$(GTEST_DIR)/include <library>libgtest_main ;
+exe test_all : test_ConfigManager.cpp ../ConfigManager.cpp ../ConfigManager.h : <include>$(GTEST_DIR)/include <library>libgtest_main <library>libgcov <cxxflags>-fprofile-arcs <cxxflags>-ftest-coverage ;
 
 lib libgtest_main : : <name>gtest_main <file>$(GTEST_DIR)/make/gtest_main.a <link>static ;
+
+lib libgcov : : <name>gcov <search>/usr/lib <link>static ;

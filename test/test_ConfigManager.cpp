@@ -14,4 +14,7 @@ TEST(ConfigManagerTest, TestAddWorks) {
 	EXPECT_EQ(4, fixture->add(2,2));
 	ASSERT_EQ(4, fixture->add(2,2));
 
+	delete fixture;
+	fixture = NULL;
+
 }

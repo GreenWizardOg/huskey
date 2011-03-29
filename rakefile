@@ -1,4 +1,4 @@
-task :push => [:clean] do |t|
+task :push => [:clean, :test_clean] do |t|
 	puts "\nPushing to ec2 node\n"
 	
 	begin
@@ -27,13 +27,7 @@ task :detect_bin => [:detect_toolset] do |t|
 	
 	fail("toolset not set") if @toolset.nil?
 	
-	if @toolset == "darwin"
-		version = `g++ -dumpversion`
-		@target = "darwin-#{version.strip}"
-	else @toolset == "gcc"
-		version = `g++ -dumpversion`
-		@target = "gcc-#{version.strip}"
-	end
+	@target = determine_target(@toolset)
 	
 	puts "\nTarget is \"#{@target}\"\n"
 	
@@ -85,6 +79,58 @@ task :detect_toolset do |t|
 	
 end
 
+task :coverage => [:test] do |t|
+	puts "\n Running Coverage...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+
+	@target = determine_target(@toolset)
+
+	fail("target not set") if @target.nil? || @target == ""
+	
+	begin
+		result = sh "cd test; gcov ../*.cpp -o bin/#{@target}/debug/;"
+	rescue Exception
+		fail("\nFailure building and running tests")
+	end
+	
+	
+end
+
+task :test => [:test_clean] do |t|
+	puts "\nRunning tests...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+
+	@target = determine_target(@toolset)
+
+	fail("target not set") if @target.nil? || @target == ""
+	
+
+	begin
+		result = sh "cd test; bjam release debug toolset=#{@toolset}; ./bin/#{@target}/debug/test_all"
+	rescue Exception
+		fail("\nFailure building and running tests")
+	end
+end
+
+task :test_clean => [:detect_toolset] do |t|
+	puts "\nCleaning tests...\n"
+	
+	fail("toolset not set") if @toolset.nil?
+
+	@target = determine_target(@toolset)
+
+	fail("target not set") if @target.nil? || @target == ""
+	
+
+	begin
+		result = sh "cd test; bjam release --clean debug toolset=#{@toolset}; rm -f bin/#{@target}/debug/*; rm -f bin/#{@target}/release/*;"
+	rescue Exception
+		fail("\nFailure building and running tests")
+	end
+end
+
 def display_result(result, action)
 	if result
 		puts "\n#{action} succeeded\n"
@@ -93,3 +139,16 @@ def display_result(result, action)
 		fail
 	end
 end
+
+def determine_target(toolset = "")
+	target = ""
+	if toolset == "darwin"
+		version = `g++ -dumpversion`
+		target = "darwin-#{version.strip}"
+	else @toolset == "gcc"
+		version = `g++ -dumpversion`
+		target = "gcc-#{version.strip}"
+	end
+	return target
+end
+
