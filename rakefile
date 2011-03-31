@@ -10,12 +10,13 @@ task :push => [:clean, :test_clean] do |t|
 end
 
 task :run => [:detect_bin] do |t|
-	puts "\nRunning Binary...\n"
+	puts "\nRunning debug Binary...\n"
 	
 	fail("target not set") if @target.nil?
 	
 	begin
-		sh "./bin/#{@target}/release/elog < email.txt"
+		puts "\n\n\n\n************[OUTPUT]************\n\n\n\n"
+		sh "./bin/#{@target}/debug/elog"
 	rescue Exception
 		fail "\nRunning Binary Failed\n"
 	end
@@ -23,7 +24,7 @@ task :run => [:detect_bin] do |t|
 end
 
 task :detect_bin => [:detect_toolset] do |t|
-	puts "\nDetecting Binary...\n"
+	puts "\nDetecting debug Binary...\n"
 	
 	fail("toolset not set") if @toolset.nil?
 	
@@ -32,7 +33,7 @@ task :detect_bin => [:detect_toolset] do |t|
 	puts "\nTarget is \"#{@target}\"\n"
 	
 	begin
-		result = sh "ls ./bin/#{@target}/release/elog"
+		result = sh "ls ./bin/#{@target}/debug/elog"
 	rescue Exception
 		fail "\nBinary not detected, here's a suggestion run \"rake build\" first!\n"
 	end
@@ -43,7 +44,7 @@ task :build => [:clean] do |t|
 	
 	fail("toolset not set") if @toolset.nil?
 	
-	result = sh "bjam release debug toolset=#{@toolset}"
+	result = sh "bjam debug toolset=#{@toolset}"
 	
 	display_result(result, "Building")
 	
@@ -54,7 +55,7 @@ task :clean => [:detect_toolset] do |t|
 	
 	fail("toolset not set") if @toolset.nil?
 
-	result = sh "bjam --clean release debug toolset=#{@toolset}"
+	result = sh "bjam --clean debug toolset=#{@toolset}"
 	
 	display_result(result, "Cleaning")
 
@@ -89,7 +90,7 @@ task :coverage => [:test] do |t|
 	fail("target not set") if @target.nil? || @target == ""
 	
 	begin
-		result = sh "cd test; gcov ../*.cpp -o bin/#{@target}/debug/;"
+		result = sh "cd test; gcov ../ElogTask.cpp -o bin/#{@target}/debug/;"
 	rescue Exception
 		fail("\nFailure building and running tests")
 	end
@@ -105,10 +106,9 @@ task :test => [:test_clean] do |t|
 	@target = determine_target(@toolset)
 
 	fail("target not set") if @target.nil? || @target == ""
-	
 
 	begin
-		result = sh "cd test; bjam release debug toolset=#{@toolset}; ./bin/#{@target}/debug/test_all"
+		result = sh "cd test; bjam debug toolset=#{@toolset}; ./bin/#{@target}/debug/test_all"
 	rescue Exception
 		fail("\nFailure building and running tests")
 	end
@@ -125,7 +125,7 @@ task :test_clean => [:detect_toolset] do |t|
 	
 
 	begin
-		result = sh "cd test; bjam release --clean debug toolset=#{@toolset}; rm -f bin/#{@target}/debug/*; rm -f bin/#{@target}/release/*;"
+		result = sh "cd test; bjam --clean debug toolset=#{@toolset}; rm -f bin/#{@target}/debug/*;"
 	rescue Exception
 		fail("\nFailure building and running tests")
 	end

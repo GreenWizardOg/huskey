@@ -6,21 +6,6 @@
 // Description : elog main file
 //============================================================================
 
-#include <iostream>
-#include <string>
+#include "ElogServer.hpp"
 
-#include "ConfigManager.h"
-
-
-using namespace std;
-
-
-int main()
-{
-	cout << "HelloWorld" << endl;
-
-	ConfigManager* configManager = new ConfigManager;
-
-	cout << "Adding 2 + 2" << endl;
-	cout << "Result: " << configManager->add(2,2) << endl;
-}
+POCO_SERVER_MAIN(ElogServer)

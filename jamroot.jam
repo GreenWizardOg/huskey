@@ -1,1 +1,6 @@
-exe elog : elog.cpp ConfigManager.cpp ConfigManager.h ;
+exe elog : elog.cpp ElogServer.cpp ElogTask.cpp ApplicationWrapper.hpp IApplication.hpp : <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil ;
+
+lib libPocoFoundation : : <name>PocoFoundation <search>/usr/local/lib ;
+
+lib libPocoUtil : : <name>PocoUtil <search>/usr/local/lib ;
+
