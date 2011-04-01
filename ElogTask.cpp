@@ -9,7 +9,6 @@
 #include "ElogTask.hpp"
 
 using Poco::Task;
-using Poco::Util::Application;
 
 void ElogTask::runTask(){
 	int current_runs = 0;

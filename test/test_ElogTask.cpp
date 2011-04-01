@@ -31,16 +31,16 @@ void do_test() {
 
 	int times_run = 2;
 
+	ElogTask fixture(pointerToMockApp, times_run);
+
 	//set expectations on mock objects
 	EXPECT_CALL(mockApp, log(_)).Times(times_run);
-
-	ElogTask fixture(pointerToMockApp, times_run);
 
 	//execute fixture
 	fixture.runTask();
 }
 
-TEST(ElogServerTest, TestRunTaskCallsLogger) {
+TEST(ElogTaskTest, TestRunTaskCallsLogger) {
 	do_test();
 }
 

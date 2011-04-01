@@ -1,6 +1,8 @@
 /*
  * ElogServer.cpp
  *
+ * Main class for managing tasks, defining options and displaying help
+ *
  *  Created on: Mar 30, 2011
  *      Author: barryodriscoll
  */
@@ -10,22 +12,15 @@
 #include "Poco/Util/Option.h"
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
-#include "Poco/Task.h"
-#include "Poco/TaskManager.h"
 #include "Poco/Logger.h"
-#include "Poco/DateTimeFormatter.h"
 #include "ApplicationWrapper.hpp"
+#include "TaskManagerWrapper.hpp"
 
 using Poco::Util::Option;
 using Poco::Util::OptionSet;
 using Poco::Util::OptionCallback;
 using Poco::Util::HelpFormatter;
 using Poco::Logger;
-using Poco::Task;
-using Poco::TaskManager;
-using Poco::DateTimeFormatter;
-
-class ElogTask;
 
 void ElogServer::initialize(Application& self)
 {
@@ -67,16 +62,26 @@ void ElogServer::displayHelp()
 	helpFormatter.format(std::cout);
 }
 
+
+void ElogServer::performWork(ITaskManager * taskManagerWrapper) {
+	if (!_helpRequested){
+
+		taskManagerWrapper->startTasks(new ElogTask(new ApplicationWrapper, -1));
+
+		waitForTerminationRequest();
+
+		taskManagerWrapper->killAndCleanTasks();
+	}
+}
+
 int ElogServer::main(const std::vector<std::string>& args)
 {
-	if (!_helpRequested)
-	{
-		TaskManager taskManager;
-	    taskManager.start(new ElogTask(new ApplicationWrapper, -1));
-		waitForTerminationRequest();
-		taskManager.cancelAll();
-		taskManager.joinAll();
-	}
+	TaskManagerWrapper taskManagerWrapper;
+
+	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
+
+	performWork(pointerToTaskManagerWrapper);
+
 	return Application::EXIT_OK;
 }
 

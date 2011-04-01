@@ -90,7 +90,7 @@ task :coverage => [:test] do |t|
 	fail("target not set") if @target.nil? || @target == ""
 	
 	begin
-		result = sh "cd test; gcov ../ElogTask.cpp -o bin/#{@target}/debug/;"
+		result = sh "cd test; gcov ../ElogTask.cpp ../ElogServer.cpp -o bin/#{@target}/debug/;"
 	rescue Exception
 		fail("\nFailure building and running tests")
 	end

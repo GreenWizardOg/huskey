@@ -1,7 +1,7 @@
 local GTEST_DIR = [ modules.peek : GTEST_DIR ] ;
 echo "GTEST_DIR = $(GTEST_DIR)" ;
 
-exe test_all : test_all.cpp test_ElogServer.cpp ../ElogServer.hpp ../ElogServer.cpp test_ElogTask.cpp ../ElogTask.cpp ../ElogTask.hpp ../IApplication.hpp : <include>/usr/local/include <include>$(GTEST_DIR)/include <library>libPocoFoundation <library>libPocoUtil <library>libgooglemock <library>libgtest_main <library>libgcov <cxxflags>-fprofile-arcs <cxxflags>-ftest-coverage ;
+exe test_all : test_all.cpp test_ElogServer.cpp ../ElogServer.hpp ../ElogServer.cpp test_ElogTask.cpp ../ElogTask.cpp ../ElogTask.hpp ../IApplication.hpp ../ITaskManager.hpp : <include>/usr/local/include <include>$(GTEST_DIR)/include <library>libPocoFoundation <library>libPocoUtil <library>libgooglemock <library>libgtest_main <library>libgcov <cxxflags>-fprofile-arcs <cxxflags>-ftest-coverage ;
 
 lib libgtest_main : : <name>gtest_main <file>$(GTEST_DIR)/make/gtest_main.a <link>static ;
 

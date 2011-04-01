@@ -12,6 +12,7 @@
 #include "ElogTask.hpp"
 #include "Poco/Util/OptionSet.h"
 #include <iostream>
+#include "ITaskManager.hpp"
 
 using Poco::Util::Application;
 using Poco::Util::ServerApplication;
@@ -20,12 +21,20 @@ using Poco::Util::OptionSet;
 class ElogServer: public ServerApplication
 {
 public:
+
 	ElogServer(): _helpRequested(false)
 	{
 	}
 
 	~ElogServer()
 	{
+	}
+
+	void performWork(ITaskManager * taskManagerWrapper);
+
+	//only for tests
+	void setHelpRequested(bool helpRequested) {
+		_helpRequested = helpRequested;
 	}
 
 protected:
