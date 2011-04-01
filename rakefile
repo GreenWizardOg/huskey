@@ -110,8 +110,10 @@ task :test => [:test_clean] do |t|
 	begin
 		result = sh "cd test; bjam debug toolset=#{@toolset}; ./bin/#{@target}/debug/test_all"
 	rescue Exception
+		say("tests failed")
 		fail("\nFailure building and running tests")
 	end
+	say("tests completed")
 end
 
 task :test_clean => [:detect_toolset] do |t|
@@ -133,8 +135,10 @@ end
 
 def display_result(result, action)
 	if result
+		say ("#{action} succeeded")
 		puts "\n#{action} succeeded\n"
 	else
+		say ("#{action} failed")
 		puts "\n#{action} failed\n"
 		fail
 	end
@@ -152,3 +156,6 @@ def determine_target(toolset = "")
 	return target
 end
 
+def say(message = "")
+	sh "say \"#{message}\""
+end
