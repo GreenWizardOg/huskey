@@ -9,6 +9,52 @@ task :push => [:clean, :test_clean] do |t|
 
 end
 
+task :log => [:detect_toolset] do |t|
+	puts "\nDisplaying Log...\n"
+	
+	@target = determine_target(@toolset)
+	
+	fail("target not set") if @target.nil?
+	
+	begin
+		puts "\n\n\n\n************[LOG]************\n\n\n\n"
+		result = sh "cat ./bin/#{@target}/debug/elog.log"
+	rescue Exception
+		fail "\n Displaying Log Failed\n"
+	end
+	
+end
+
+task :do_debug => [:detect_bin] do |t|
+	puts "\nDisplaying Log...\n"
+	
+	@target = determine_target(@toolset)
+	
+	fail("target not set") if @target.nil?
+	
+	begin
+		result = sh "cd ./bin/#{@target}/debug; gdb elog"
+	rescue Exception
+		fail "\nRunning Debugging Binary Failed\n"
+	end
+end
+
+
+task :do_debug_test => [:detect_bin] do |t|
+	puts "\nDisplaying Log...\n"
+	
+	@target = determine_target(@toolset)
+	
+	fail("target not set") if @target.nil?
+	
+	begin
+		result = sh "cd ./test/bin/#{@target}/debug; gdb test_all"
+	rescue Exception
+		fail "\nRunning Debugging test failed\n"
+	end
+end
+
+
 task :run => [:detect_bin] do |t|
 	puts "\nRunning debug Binary...\n"
 	
