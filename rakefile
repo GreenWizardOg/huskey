@@ -16,7 +16,28 @@ task :run => [:detect_bin] do |t|
 	
 	begin
 		puts "\n\n\n\n************[OUTPUT]************\n\n\n\n"
-		sh "./bin/#{@target}/debug/elog"
+		result = sh "./bin/#{@target}/debug/elog"
+		display_result(result, "Running")
+	rescue Exception
+		fail "\nRunning Binary Failed\n"
+	end
+end
+
+task :run_with_config => [:copy_config] do |t|
+	Rake::Task['run'].invoke
+end
+
+task :copy_config => [:detect_toolset] do |t|
+	puts "\n Copying config file into output directory \n"
+	
+	@target = determine_target(@toolset)
+	
+	fail("target not set") if @target.nil?
+	
+	begin
+		puts "\n\n\n\n************[OUTPUT]************\n\n\n\n"
+		result = sh "cp elog.properties ./bin/#{@target}/debug/"
+		display_result(result, "Configuring")
 	rescue Exception
 		fail "\nRunning Binary Failed\n"
 	end
@@ -55,7 +76,11 @@ task :clean => [:detect_toolset] do |t|
 	
 	fail("toolset not set") if @toolset.nil?
 
-	result = sh "bjam --clean debug toolset=#{@toolset}"
+	@target = determine_target(@toolset)
+	
+	puts "\nTarget is \"#{@target}\"\n"
+
+	result = sh "bjam --clean debug toolset=#{@toolset}; rm -f ./bin/#{@target}/debug/*.log; rm -f ./bin/#{@target}/debug/*.properties"
 	
 	display_result(result, "Cleaning")
 
@@ -135,10 +160,10 @@ end
 
 def display_result(result, action)
 	if result
-		say ("#{action} succeeded")
+		say("#{action} succeeded")
 		puts "\n#{action} succeeded\n"
 	else
-		say ("#{action} failed")
+		say("#{action} failed")
 		puts "\n#{action} failed\n"
 		fail
 	end

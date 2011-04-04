@@ -1,4 +1,4 @@
-exe elog : elog.cpp ElogServer.cpp ElogTask.cpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp : <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil ;
+exe elog : elog.cpp ElogServer.cpp ElogTask.cpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp ConfigManager.cpp IConfig.hpp ConfigWrapper.hpp : <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil ;
 
 lib libPocoFoundation : : <name>PocoFoundation <search>/usr/local/lib ;
 
