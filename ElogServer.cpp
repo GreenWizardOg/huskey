@@ -15,6 +15,8 @@
 #include "Poco/Logger.h"
 #include "ApplicationWrapper.hpp"
 #include "TaskManagerWrapper.hpp"
+#include "LogManager.hpp"
+#include "LoggerWrapper.hpp"
 
 using Poco::Util::Option;
 using Poco::Util::OptionSet;
@@ -26,12 +28,13 @@ void ElogServer::initialize(Application& self)
 {
 	loadConfiguration(); // load default configuration files, if present
 	ServerApplication::initialize(self);
-	logger().information("starting up");
+	LogManager logger = getLogger();
+	logger.log("starting up");
 }
 
 void ElogServer::uninitialize()
 {
-	logger().information("shutting down");
+	getLogger().log("shutting down");
 	ServerApplication::uninitialize();
 }
 
@@ -85,3 +88,18 @@ int ElogServer::main(const std::vector<std::string>& args)
 	return Application::EXIT_OK;
 }
 
+
+namespace
+{
+	static SingletonLogger singletonLogger(new LoggerWrapper);
+}
+
+LogManager& ElogServer::getLogger()
+{
+	return *singletonLogger.get();
+}
+
+//only for tests
+void ElogServer::setupMockLogger(ILogger * logger){
+	singletonLogger.set(logger);
+}

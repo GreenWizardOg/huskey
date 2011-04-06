@@ -9,6 +9,9 @@
 #include "ElogTask.hpp"
 #include <iostream>
 #include <exception>
+#include "LogManager.hpp"
+#include "LoggerWrapper.hpp"
+#include "ElogServer.hpp"
 
 using Poco::Task;
 
@@ -19,7 +22,7 @@ void ElogTask::runTask(){
 	{
 		current_runs++;
 	    std::string *msg = new std::string("Elog daemon sitting idle...");
-	    _app->log(msg);
+		ElogServer::getLogger().log(*msg);
 	}
 }
 

@@ -13,10 +13,13 @@
 #include "Poco/Util/OptionSet.h"
 #include <iostream>
 #include "ITaskManager.hpp"
+#include "LogManager.hpp"
+#include "SingletonLogger.hpp"
 
 using Poco::Util::Application;
 using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
+using Poco::SingletonHolder;
 
 class ElogServer: public ServerApplication
 {
@@ -37,6 +40,9 @@ public:
 		_helpRequested = helpRequested;
 	}
 
+	static LogManager& getLogger();
+	static void setupMockLogger(ILogger * logger);
+
 protected:
 	void initialize(Application& self);
 
@@ -52,6 +58,7 @@ protected:
 
 private:
 	bool _helpRequested;
+
 };
 
 #endif /* ELOGSERVER_HPP_ */

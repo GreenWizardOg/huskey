@@ -11,6 +11,9 @@
 #include "Poco/Logger.h"
 #include <gtest/gtest.h>
 #include "gmock/gmock.h"
+#include "MockLoggerWrapper.hpp"
+#include "../ILogger.hpp"
+#include "../ElogServer.hpp"
 #include <iostream>
 
 using Poco::Logger;
@@ -24,7 +27,7 @@ public:
 	MOCK_METHOD1(log, void(std::string *));
 };
 
-void do_test() {
+TEST(ElogTaskTest, TestRunTaskCallsLogger) {
 	MockApplication mockApp;
 
 	IApplication * pointerToMockApp = &mockApp;
@@ -33,14 +36,14 @@ void do_test() {
 
 	ElogTask fixture(pointerToMockApp, times_run);
 
-	//set expectations on mock objects
-	EXPECT_CALL(mockApp, log(_)).Times(times_run);
+	MockLoggerWrapper mockLoggerWrapper;
+	ILogger * pointerToMockLoggerWrapper = &mockLoggerWrapper;
+
+	EXPECT_CALL(mockLoggerWrapper, mockLog(_)).Times(times_run);
+
+	ElogServer::setupMockLogger(pointerToMockLoggerWrapper);
 
 	//execute fixture
 	fixture.runTask();
-}
-
-TEST(ElogTaskTest, TestRunTaskCallsLogger) {
-	do_test();
 }
 

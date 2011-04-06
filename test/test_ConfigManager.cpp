@@ -10,6 +10,9 @@
 #include "gmock/gmock.h"
 #include "Poco/Exception.h"
 #include "../IConfig.hpp"
+#include "../ElogServer.hpp"
+#include "../ILogger.hpp"
+#include "MockLoggerWrapper.hpp"
 #include <string>
 
 using ::testing::_;
@@ -30,6 +33,11 @@ public:
 class ConfigManagerTest : public testing::Test {
  protected:
 	virtual void SetUp() {
+		mockLogger = new MockLoggerWrapper;
+		ILogger * pointerToMockLoggerWrapper = mockLogger;
+
+		ElogServer::setupMockLogger(pointerToMockLoggerWrapper);
+
 		mockConfig = new MockConfigWrapper;
 		IConfig * pointerToMockConfig = mockConfig;
 		fixture = new ConfigManager(pointerToMockConfig);
@@ -38,14 +46,17 @@ class ConfigManagerTest : public testing::Test {
 	virtual void TearDown() {
 		delete mockConfig;
 		delete fixture;
+		delete mockLogger;
 	}
 
 	ConfigManager * fixture;
 	MockConfigWrapper * mockConfig;
+	MockLoggerWrapper * mockLogger;
 
 };
 
 TEST_F(ConfigManagerTest, TestGetPropertyThatExists) {
+	EXPECT_CALL(*mockLogger, mockLog(_)).Times(1);
 	EXPECT_CALL(*mockConfig, getPropertyMock(_)).Times(1).WillRepeatedly(Return(std::string("I was in the config file!")));
 
 	EXPECT_EQ(std::string("I was in the config file!"), fixture->getProperty(new std::string("good_property")));
