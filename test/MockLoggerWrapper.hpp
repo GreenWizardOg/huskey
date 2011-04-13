@@ -20,6 +20,7 @@ public:
 	//virtual void log(const std::string& msg) throw (AssertionViolationException) = 0;
 	MOCK_METHOD1(mockLog, void(const std::string& msg));
 	virtual void log(const std::string& msg) throw (AssertionViolationException) {
+		std::cout << std::endl << msg << std::endl;
 		mockLog(msg);
 	}
 };

@@ -9,6 +9,22 @@ task :push => [:clean, :test_clean] do |t|
 
 end
 
+task :migrate do |t|
+	puts "\nRunning migrations\n"
+	
+	result = sh "liquibase update"
+	
+	display_result(result, "Migrating")
+end
+
+task :db_clean do |t|
+	puts "\nCleaning database\n"
+	
+	result = sh "liquibase dropAll"
+	
+	display_result(result, "Cleaning database")
+end
+
 task :log => [:detect_toolset] do |t|
 	puts "\nDisplaying Log...\n"
 	
@@ -40,7 +56,7 @@ task :do_debug => [:detect_bin] do |t|
 end
 
 
-task :do_debug_test => [:detect_bin] do |t|
+task :do_debug_test => [:detect_bin, :db_clean, :migrate] do |t|
 	puts "\nDisplaying Log...\n"
 	
 	@target = determine_target(@toolset)
@@ -169,7 +185,7 @@ task :coverage => [:test] do |t|
 	
 end
 
-task :test => [:test_clean] do |t|
+task :test => [:detect_toolset, :db_clean, :migrate] do |t|
 	puts "\nRunning tests...\n"
 	
 	fail("toolset not set") if @toolset.nil?
