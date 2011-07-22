@@ -1,6 +1,4 @@
-exe basic_database_test : basic_database_test.cpp : <include>/usr/local/pgsql/include <library>libpq ;
-
-exe elog : elog.cpp ElogServer.cpp ElogTask.cpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp ConfigManager.cpp IConfig.hpp ConfigWrapper.hpp LogManager.cpp LoggerWrapper.hpp SingletonLogger.hpp DatabaseManager.cpp DatabaseManager.hpp : <include>/usr/local/pgsql/include <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil <library>libpq ;
+exe huskey : huskey.cpp HuskeyServer.cpp InfoTask.cpp InfoTask.hpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp ConfigManager.cpp IConfig.hpp ConfigWrapper.hpp LogManager.cpp LoggerWrapper.hpp SingletonLogger.hpp : <include>/usr/local/pgsql/include <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil <library>libpq <library>libchilkat_universal_32_64 ;
 
 lib libPocoFoundation : : <name>PocoFoundation <search>/usr/local/lib ;
 
@@ -8,3 +6,4 @@ lib libPocoUtil : : <name>PocoUtil <search>/usr/local/lib ;
 
 lib libpq : : <name>pq <search>/usr/local/pgsql/lib ;
 
+lib libchilkat_universal_32_64 : : <name>chilkat_universal_32_64 <search>/usr/local/lib ;

@@ -1,15 +1,15 @@
 /*
- * ElogServer.hpp
+ * HuskeyServer.hpp
  *
- *  Created on: Mar 30, 2011
+ *  Created on: June 30, 2011
  *      Author: barryodriscoll
  */
 
-#ifndef ELOGSERVER_HPP_
-#define ELOGSERVER_HPP_
+#ifndef HUSKEYSERVER_HPP_
+#define HUSKEYSERVER_HPP_
 
 #include "Poco/Util/ServerApplication.h"
-#include "ElogTask.hpp"
+#include "InfoTask.hpp"
 #include "Poco/Util/OptionSet.h"
 #include <iostream>
 #include "ITaskManager.hpp"
@@ -21,15 +21,15 @@ using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
 using Poco::SingletonHolder;
 
-class ElogServer: public ServerApplication
+class HuskeyServer: public ServerApplication
 {
 public:
 
-	ElogServer(): _helpRequested(false)
+	HuskeyServer(): _helpRequested(false)
 	{
 	}
 
-	~ElogServer()
+	~HuskeyServer()
 	{
 	}
 
@@ -61,4 +61,4 @@ private:
 
 };
 
-#endif /* ELOGSERVER_HPP_ */
+#endif /* HUSKEYSERVER_HPP_ */

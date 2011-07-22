@@ -7,6 +7,7 @@
 
 #ifndef LOGMANAGER_HPP_
 #define LOGMANAGER_HPP_
+
 #include "Poco/Exception.h"
 #include <iostream>
 #include "ILogger.hpp"

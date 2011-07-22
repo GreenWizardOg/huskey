@@ -6,6 +6,6 @@
 // Description : elog main file
 //============================================================================
 
-#include "ElogServer.hpp"
+#include "HuskeyServer.hpp"
 
-POCO_SERVER_MAIN(ElogServer)
+POCO_SERVER_MAIN(HuskeyServer)

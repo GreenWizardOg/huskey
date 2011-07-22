@@ -34,7 +34,7 @@ task :log => [:detect_toolset] do |t|
 	
 	begin
 		puts "\n\n\n\n************[LOG]************\n\n\n\n"
-		result = sh "cat ./bin/#{@target}/debug/elog.log"
+		result = sh "tail -f ./bin/#{@target}/debug/elog.log"
 	rescue Exception
 		fail "\n Displaying Log Failed\n"
 	end
@@ -78,7 +78,7 @@ task :run => [:detect_bin] do |t|
 	
 	begin
 		puts "\n\n\n\n************[OUTPUT]************\n\n\n\n"
-		result = sh "./bin/#{@target}/debug/elog"
+		result = sh "./bin/#{@target}/debug/huskey"
 		display_result(result, "Running")
 	rescue Exception
 		fail "\nRunning Binary Failed\n"
@@ -177,7 +177,7 @@ task :coverage => [:test] do |t|
 	fail("target not set") if @target.nil? || @target == ""
 	
 	begin
-		result = sh "cd test; gcov ../ElogTask.cpp ../ElogServer.cpp -o bin/#{@target}/debug/;"
+		result = sh "cd test; gcov ../InfoTask.cpp ../ElogServer.cpp -o bin/#{@target}/debug/;"
 	rescue Exception
 		fail("\nFailure building and running tests")
 	end

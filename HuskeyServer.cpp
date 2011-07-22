@@ -1,14 +1,14 @@
 /*
- * ElogServer.cpp
+ * HuskeyServer.cpp
  *
  * Main class for managing tasks, defining options and displaying help
  *
- *  Created on: Mar 30, 2011
+ *  Created on: June 30, 2011
  *      Author: barryodriscoll
  */
 
-#include "ElogServer.hpp"
-#include "ElogTask.hpp"
+#include "HuskeyServer.hpp"
+#include "InfoTask.hpp"
 #include "Poco/Util/Option.h"
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
@@ -24,7 +24,7 @@ using Poco::Util::OptionCallback;
 using Poco::Util::HelpFormatter;
 using Poco::Logger;
 
-void ElogServer::initialize(Application& self)
+void HuskeyServer::initialize(Application& self)
 {
 	loadConfiguration(); // load default configuration files, if present
 	ServerApplication::initialize(self);
@@ -32,44 +32,45 @@ void ElogServer::initialize(Application& self)
 	logger.log("starting up");
 }
 
-void ElogServer::uninitialize()
+void HuskeyServer::uninitialize()
 {
 	getLogger().log("shutting down");
 	ServerApplication::uninitialize();
 }
 
-void ElogServer::defineOptions(OptionSet& options)
+void HuskeyServer::defineOptions(OptionSet& options)
 {
 	ServerApplication::defineOptions(options);
 
 	options.addOption(
-			Option("help", "h", "display help information on command line arguments")
+			Option("help", "h", "display help information on command line arguments, commands: 'info', 'listen', 'start' ")
 			.required(false)
 			.repeatable(false)
-			.callback(OptionCallback<ElogServer>(this, &ElogServer::handleHelp)));
+			.callback(OptionCallback<HuskeyServer>(this, &HuskeyServer::handleHelp)));
 }
 
-void ElogServer::handleHelp(const std::string& name, const std::string& value)
+void HuskeyServer::handleHelp(const std::string& name, const std::string& value)
 {
 	_helpRequested = true;
 	displayHelp();
 	stopOptionsProcessing();
 }
 
-void ElogServer::displayHelp()
+void HuskeyServer::displayHelp()
 {
 	HelpFormatter helpFormatter(options());
 	helpFormatter.setCommand(commandName());
 	helpFormatter.setUsage("OPTIONS");
-	helpFormatter.setHeader("The eLog server designed to enable smart metering in any environment");
+	helpFormatter.setHeader("Huskey, for those conversations you hope no one knows about...");
+	helpFormatter.setFooter("Remember, this is only a piece of software, it can be cracked\n or they could have a key logger built into your keyboard...");
 	helpFormatter.format(std::cout);
 }
 
 
-void ElogServer::performWork(ITaskManager * taskManagerWrapper) {
+void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
 	if (!_helpRequested){
 
-		taskManagerWrapper->startTasks(new ElogTask(new ApplicationWrapper, -1));
+		taskManagerWrapper->startTasks(new InfoTask(new ApplicationWrapper, 5));
 
 		waitForTerminationRequest();
 
@@ -77,7 +78,7 @@ void ElogServer::performWork(ITaskManager * taskManagerWrapper) {
 	}
 }
 
-int ElogServer::main(const std::vector<std::string>& args)
+int HuskeyServer::main(const std::vector<std::string>& args)
 {
 	TaskManagerWrapper taskManagerWrapper;
 
@@ -94,12 +95,12 @@ namespace
 	static SingletonLogger singletonLogger(new LoggerWrapper);
 }
 
-LogManager& ElogServer::getLogger()
+LogManager& HuskeyServer::getLogger()
 {
 	return *singletonLogger.get();
 }
 
 //only for tests
-void ElogServer::setupMockLogger(ILogger * logger){
+void HuskeyServer::setupMockLogger(ILogger * logger){
 	singletonLogger.set(logger);
 }

@@ -9,7 +9,7 @@
 #include "ConfigWrapper.hpp"
 #include "Poco/String.h"
 #include "Poco/Foundation.h"
-#include "ElogServer.hpp"
+#include "HuskeyServer.hpp"
 #include <string>
 
 using Poco::trimRightInPlace;
@@ -26,7 +26,7 @@ std::string ConfigManager::getProperty(std::string * property) throw (AssertionV
 
 	std::string result = _config->getProperty(property);
 
-	ElogServer::getLogger().log("Property: " + *property + "loaded with result: " + result);
+	HuskeyServer::getLogger().log("Property: " + *property + "loaded with result: " + result);
 
 	return result;
 }
