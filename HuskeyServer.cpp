@@ -40,6 +40,7 @@ void HuskeyServer::uninitialize()
 
 void HuskeyServer::defineOptions(OptionSet& options)
 {
+	//TODO write an intergration test in bash to make sure this all works
 	ServerApplication::defineOptions(options);
 
 	options.addOption(
@@ -47,6 +48,18 @@ void HuskeyServer::defineOptions(OptionSet& options)
 			.required(false)
 			.repeatable(false)
 			.callback(OptionCallback<HuskeyServer>(this, &HuskeyServer::handleHelp)));
+
+	options.addOption(
+			Option("info", "i", "get information about your ip address and randomly picked port number.\nNow tell your friend about it...")
+			.required(false)
+			.repeatable(false)
+			.callback(OptionCallback<HuskeyServer>(this, &HuskeyServer::handleInfo)));
+
+	options.addOption(
+			Option("listen", "l", "Listen for an incomming communication from the internet pipes")
+			.required(false)
+			.repeatable(false)
+			.callback(OptionCallback<HuskeyServer>(this, &HuskeyServer::handleListen)));
 }
 
 void HuskeyServer::handleHelp(const std::string& name, const std::string& value)
@@ -56,16 +69,42 @@ void HuskeyServer::handleHelp(const std::string& name, const std::string& value)
 	stopOptionsProcessing();
 }
 
+
+void HuskeyServer::handleInfo(const std::string& name, const std::string& value)
+{
+	//TODO write a unit test for this
+	HuskeyServer::getLogger().log("Handling an info request...");
+
+	TaskManagerWrapper taskManagerWrapper;
+
+	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
+
+	performWork(pointerToTaskManagerWrapper);
+
+	stopOptionsProcessing();
+}
+
+
+void HuskeyServer::handleListen(const std::string& name, const std::string& value)
+{
+	//TODO figure out how to open a raw socket and listen on a particular port
+	HuskeyServer::getLogger().log("Handling an listen request...");
+	HuskeyServer::getLogger().log("Sadly I haven't written the code to make this work yet");
+
+	stopOptionsProcessing();
+
+}
+
+
 void HuskeyServer::displayHelp()
 {
 	HelpFormatter helpFormatter(options());
 	helpFormatter.setCommand(commandName());
 	helpFormatter.setUsage("OPTIONS");
 	helpFormatter.setHeader("Huskey, for those conversations you hope no one knows about...");
-	helpFormatter.setFooter("Remember, this is only a piece of software, it can be cracked\n or they could have a key logger built into your keyboard...");
+	helpFormatter.setFooter("Remember, this is only a piece of software, it be badly designed/written\nOr the man could have a key logger built into your keyboard...");
 	helpFormatter.format(std::cout);
 }
-
 
 void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
 	if (!_helpRequested){
@@ -80,12 +119,7 @@ void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
 
 int HuskeyServer::main(const std::vector<std::string>& args)
 {
-	TaskManagerWrapper taskManagerWrapper;
-
-	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
-
-	performWork(pointerToTaskManagerWrapper);
-
+	//TODO make sure exe can run on unix/windows/mac without any required libs
 	return Application::EXIT_OK;
 }
 

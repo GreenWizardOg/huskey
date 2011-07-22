@@ -17,7 +17,7 @@ using Poco::Task;
 class InfoTask: public Task
 {
 public:
-	InfoTask(IApplication * app, int how_many_times) : Task("InfoTask"), _how_many_times(how_many_times)
+	InfoTask(IApplication * app, int how_many_times) : Task("InfoTask")
 	{
 		_app = app;
 	}
@@ -26,7 +26,6 @@ public:
 
 private:
 	std::string stripAddress(std::string commandLineOutput);
-	int _how_many_times;
 	IApplication * _app;
 };
 

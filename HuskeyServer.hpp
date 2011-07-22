@@ -52,6 +52,10 @@ protected:
 
 	void handleHelp(const std::string& name, const std::string& value);
 
+	void handleInfo(const std::string& name, const std::string& value);
+
+	void handleListen(const std::string& name, const std::string& value);
+
 	void displayHelp();
 
 	int main(const std::vector<std::string>& args);

@@ -16,18 +16,18 @@
 using Poco::Task;
 
 void InfoTask::runTask(){
-	int current_runs = 0;
-
-	//TODO find out how to get ip address and put it in now
+	//TODO find out how to get ip address and put it in now and write some fucking tests barry
 	/* 'ifconfig | grep inet' command to get ip on my mac*/
 
 	std::string commandLineOutput = "inet 127.0.0.1 netmask 0xff000000";
 	std::string addy = stripAddress(commandLineOutput);
 
-	while (!sleep(500) && (current_runs < _how_many_times || _how_many_times < 0))
-	{
-		HuskeyServer::getLogger().log("Your ip address is:" + addy);
-	}
+	HuskeyServer::getLogger().log("Displaying your info: 5");
+	HuskeyServer::getLogger().log("[*** Your ip address is: " + addy + " ***]");
+
+
+	HuskeyServer::getLogger().log("Completed info display task");
+
 }
 
 
