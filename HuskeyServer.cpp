@@ -99,38 +99,17 @@ void HuskeyServer::displayHelp()
 	helpFormatter.format(std::cout);
 }
 
-void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
-/*if (_infoRequested)
-{
-	HuskeyServer::getLogger().log("Handling an info request...");
-
-	taskManagerWrapper->startTasks(new InfoTask(new ApplicationWrapper, 5));
-
-	waitForTerminationRequest();
-
-	taskManagerWrapper->killAndCleanTasks();
-}
-
-if (_listenRequested)
-{
-	HuskeyServer::getLogger().log("Handling an listen request, pity that code hasn't been written yet");
-}*/
-
-}
-
 int HuskeyServer::main(const std::vector<std::string>& args)
 {
 	//TODO make sure exe can run on unix/windows/mac without any required libs
 
-	HuskeyServer::getLogger().log("This will just sit here until you 'ctrl c' it, or find it 'ps aux | grep huskey' and kill it ");
+	HuskeyServer::getLogger().log("This will just sit here until you 'ctrl c' it or kill it ");
 
 	TaskManagerWrapper taskManagerWrapper;
 
-	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
-
-
 	if (_infoRequested)
 	{
+		HuskeyServer::getLogger().log("Handling an info request, some of this code has been written!");
 		taskManagerWrapper.startTasks(new InfoTask(new ApplicationWrapper, 5));
 	}
 
@@ -139,11 +118,10 @@ int HuskeyServer::main(const std::vector<std::string>& args)
 		HuskeyServer::getLogger().log("Handling an listen request, pity that code hasn't been written yet");
 	}
 
+	HuskeyServer::getLogger().log("Waiting to be killed");
 	waitForTerminationRequest();
-
+	HuskeyServer::getLogger().log("Clearning up tasks");
 	taskManagerWrapper.killAndCleanTasks();
-
-	performWork(pointerToTaskManagerWrapper);
 
 	return Application::EXIT_OK;
 }
