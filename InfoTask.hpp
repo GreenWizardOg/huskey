@@ -24,6 +24,8 @@ public:
 
 	void runTask();
 
+	std::string getIP();
+
 private:
 	std::string stripAddress(std::string commandLineOutput);
 	IApplication * _app;

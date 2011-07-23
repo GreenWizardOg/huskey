@@ -23,7 +23,6 @@ using Poco::DateTimeFormatter;
 class ApplicationWrapper : public IApplication {
 public:
 	ApplicationWrapper() {
-
 	}
 
 	void log(std::string *msg) {
