@@ -25,7 +25,7 @@ class HuskeyServer: public ServerApplication
 {
 public:
 
-	HuskeyServer(): _helpRequested(false)
+	HuskeyServer(): _helpRequested(false), _infoRequested(false), _listenRequested(false)
 	{
 	}
 
@@ -62,6 +62,8 @@ protected:
 
 private:
 	bool _helpRequested;
+	bool _infoRequested;
+	bool _listenRequested;
 
 };
 

@@ -74,13 +74,7 @@ void HuskeyServer::handleInfo(const std::string& name, const std::string& value)
 {
 	//TODO write a unit test for this
 	HuskeyServer::getLogger().log("Handling an info request...");
-
-	TaskManagerWrapper taskManagerWrapper;
-
-	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
-
-	performWork(pointerToTaskManagerWrapper);
-
+	_infoRequested = true;
 	stopOptionsProcessing();
 }
 
@@ -89,8 +83,7 @@ void HuskeyServer::handleListen(const std::string& name, const std::string& valu
 {
 	//TODO figure out how to open a raw socket and listen on a particular port
 	HuskeyServer::getLogger().log("Handling an listen request...");
-	HuskeyServer::getLogger().log("Sadly I haven't written the code to make this work yet");
-
+	_listenRequested = true;
 	stopOptionsProcessing();
 
 }
@@ -107,7 +100,9 @@ void HuskeyServer::displayHelp()
 }
 
 void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
-	if (!_helpRequested){
+	if (_infoRequested)
+	{
+		HuskeyServer::getLogger().log("Handling an info request...");
 
 		taskManagerWrapper->startTasks(new InfoTask(new ApplicationWrapper, 5));
 
@@ -115,11 +110,29 @@ void HuskeyServer::performWork(ITaskManager * taskManagerWrapper) {
 
 		taskManagerWrapper->killAndCleanTasks();
 	}
+
+	if (_listenRequested)
+	{
+		HuskeyServer::getLogger().log("Handling an listen request, pity that code hasn't been written yet");
+	}
+
 }
 
 int HuskeyServer::main(const std::vector<std::string>& args)
 {
 	//TODO make sure exe can run on unix/windows/mac without any required libs
+	/*
+	TaskManagerWrapper taskManagerWrapper;
+
+	ITaskManager * pointerToTaskManagerWrapper = &taskManagerWrapper;
+
+	performWork(pointerToTaskManagerWrapper);
+	*/
+
+	/*
+	 * HuskeyServer::getLogger().log("Sadly I haven't written the code to make this work yet");
+	 */
+
 	return Application::EXIT_OK;
 }
 
