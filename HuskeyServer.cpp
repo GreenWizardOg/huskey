@@ -118,8 +118,10 @@ int HuskeyServer::main(const std::vector<std::string>& args)
 		HuskeyServer::getLogger().log("Handling an listen request, pity that code hasn't been written yet");
 	}
 
-	HuskeyServer::getLogger().log("Waiting to be killed");
+	HuskeyServer::getLogger().log("Done with tasks waiting to die...");
+
 	waitForTerminationRequest();
+
 	HuskeyServer::getLogger().log("Clearning up tasks");
 	taskManagerWrapper.killAndCleanTasks();
 

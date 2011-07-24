@@ -1,4 +1,4 @@
-exe huskey : huskey.cpp HuskeyServer.cpp InfoTask.cpp InfoTask.hpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp ConfigManager.cpp IConfig.hpp ConfigWrapper.hpp LogManager.cpp LoggerWrapper.hpp SingletonLogger.hpp : <include>/usr/local/pgsql/include <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil <library>libpq <library>libchilkat_universal_32_64 ;
+exe huskey : huskey.cpp StringUtils.cpp StringUtils.hpp HuskeyServer.cpp InfoTask.cpp InfoTask.hpp ApplicationWrapper.hpp IApplication.hpp TaskManagerWrapper.hpp ITaskManager.hpp ConfigManager.cpp IConfig.hpp ConfigWrapper.hpp LogManager.cpp LoggerWrapper.hpp SingletonLogger.hpp : <include>/usr/local/pgsql/include <include>/usr/local/include <library>libPocoFoundation <library>libPocoUtil <library>libpq <library>libchilkat_universal_32_64 ;
 
 lib libPocoFoundation : : <name>PocoFoundation <search>/usr/local/lib ;
 
